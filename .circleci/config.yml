@@ -142,15 +142,13 @@ jobs:
       - checkout
       - run: circleci orb publish promote circleci/azure-cli@dev:${CIRCLE_SHA1:0:7} patch --token $CIRCLE_TOKEN
 
-integration_dev_filters: &integration_dev_filters
-  filters:
+integration-dev_filters: &integration-dev_filters
     branches:
       ignore: /.*/
     tags:
       only: /integration-.*/
 
-integration_master_filters: &integration_master_filters
-  filters:
+integration-master_filters: &integration-master_filters
     branches:
       ignore: /.*/
     tags:
@@ -189,22 +187,36 @@ workflows:
 
   integration_test-prod_deploy:
     jobs:
-      - test-orb:                 *integration_dev_filters
-      - test-orb-docker-executor: *integration_dev_filters
-      - test-orb-non-python:      *integration_dev_filters
+      # triggered by non-master branch commits
+      - test-orb:
+          name: test-orb_dev
+          filters: *integration-dev_filters
 
-      - test-orb:                 *integration_master_filters
-      - test-orb-docker-executor: *integration_master_filters
-      - test-orb-non-python:      *integration_master_filters
+      - test-orb-docker-executor:
+          name: test-orb-docker_dev
+          filters: *integration-dev_filters
+
+      - test-orb-non-python:
+          name: test-orb-non-python_dev
+          filters: *integration-dev_filters
+
+      # triggered by master branch commits
+      - test-orb:
+          name: test-orb_master
+          filters: *integration-master_filters
+
+      - test-orb-docker-executor:
+          name: test-orb-docker_master
+          filters: *integration-master_filters
+
+      - test-orb-non-python:
+          name: test-orb-non-python_master
+          filters: *integration-master_filters
 
       - dev-promote-prod:
           context: orb-publishing
           requires:
-            - test-orb
-            - test-orb-docker-executor
-            - test-orb-non-python
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /master-.*/
+            - test-orb_master
+            - test-orb-docker_master
+            - test-orb-non-python_master
+          filters: *integration-master_filters
