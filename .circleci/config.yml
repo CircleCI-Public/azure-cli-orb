@@ -143,16 +143,16 @@ jobs:
       - run: circleci orb publish promote circleci/azure-cli@dev:${CIRCLE_SHA1:0:7} patch --token $CIRCLE_TOKEN
 
 integration-dev_filters: &integration-dev_filters
-    branches:
-      ignore: /.*/
-    tags:
-      only: /integration-.*/
+  branches:
+    ignore: /.*/
+  tags:
+    only: /integration-.*/
 
 integration-master_filters: &integration-master_filters
-    branches:
-      ignore: /.*/
-    tags:
-      only: /master-.*/
+  branches:
+    ignore: /.*/
+  tags:
+    only: /master-.*/
 
 workflows:
   validate_dev-deploy:

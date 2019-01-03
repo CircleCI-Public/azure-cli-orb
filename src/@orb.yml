@@ -19,7 +19,7 @@ executors:
     docker:
       - image: circleci/python:<< parameters.python-version >>-<< parameters.debian-release >>
   azure-docker:
-    description: The official Microsoft docker container with Azure CLI 
+    description: The official Microsoft docker container with Azure CLI
                  pre-installed
     docker:
       - image: microsoft/azure-cli
@@ -41,8 +41,8 @@ commands:
 
             # Set sudo to work whether logged in as root user or non-root user
             if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
-            
-            $SUDO apt-get update && $SUDO apt-get -qqy install apt-transport-https 
+
+            $SUDO apt-get update && $SUDO apt-get -qqy install apt-transport-https
 
             if [[ $(command -v lsb_release) == "" ]]; then
               echo "Installing lsb_release"
@@ -52,7 +52,7 @@ commands:
             # Create an environment variable for the correct distribution
             export AZ_REPO=$(lsb_release -cs)
 
-            # Modify your sources list 
+            # Modify your sources list
             echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
             $SUDO tee /etc/apt/sources.list.d/azure-cli.list
 
@@ -61,7 +61,7 @@ commands:
               $SUDO apt-get -qqy install curl
             fi
 
-            # Get the Microsoft signing key 
+            # Get the Microsoft signing key
             curl -L https://packages.microsoft.com/keys/microsoft.asc | $SUDO apt-key add -
 
             # Update and install the Azure CLI
@@ -121,4 +121,4 @@ commands:
               --service-principal \
               --tenant << parameters.azure-tenant >> \
               -u << parameters.azure-username >> \
-              -p << parameters.azure-password >>       
+              -p << parameters.azure-password >>
