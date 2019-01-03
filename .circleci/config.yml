@@ -1,0 +1,210 @@
+version: 2.1
+
+orbs:
+  azure-cli: circleci/azure-cli@dev:alpha
+
+executors:
+  cli:
+    resource_class: small
+    docker:
+      - image: circleci/circleci-cli
+
+  lint:
+    resource_class: small
+    docker:
+      - image: singapore/lint-condo
+
+  github:
+    resource_class: small
+    docker:
+      - image: cibuilds/github
+
+  golang:
+    resource_class: small
+    docker:
+      - image: circleci/golang
+
+  python:
+    resource_class: small
+    docker:
+      - image: circleci/python:2.7-stretch
+
+commands:
+  azure-cli-tests:
+    description: "Verifies azure-cli install"
+    steps:
+      - azure-cli/install
+
+      - run:
+          name: Verify Azure install
+          command: az -v
+
+      - azure-cli/login-with-user
+
+      - run:
+          name: Verify login with user
+          command: az resource list
+
+      - run: az logout
+
+      - azure-cli/login-with-service-principal:
+          azure-username: $AZURE_SP_NAME
+          azure-password: $AZURE_SP_PASSWORD
+          azure-tenant: $AZURE_SP_TENANT
+
+      - run:
+          name: Verify login with Service Principal
+          command: az resource list
+
+      - run: az logout
+
+      - azure-cli/login-with-user:
+          alternate-tenant: true
+          azure-tenant: $AZURE_SP_TENANT
+
+      - run:
+          name: Verify login with user and alternate tenant
+          command: az resource list
+
+jobs:
+  lint:
+    executor: lint
+    steps:
+      - checkout
+      - run: yamllint .
+
+  validate:
+    executor: cli
+    steps:
+      - checkout
+      - run: circleci orb validate src/@orb.yml
+
+  publish-dev:
+    executor: cli
+    steps:
+      - checkout
+
+      - run:
+          name: publish dev versions
+          command: |
+            # for integration testing
+            circleci orb publish src/@orb.yml circleci/azure-cli@dev:alpha --token $CIRCLE_TOKEN
+
+            # for transparency
+            circleci orb publish src/@orb.yml circleci/azure-cli@dev:$CIRCLE_BRANCH-${CIRCLE_SHA1:0:7} --token $CIRCLE_TOKEN
+
+            # for potentially promoting to prod
+            circleci orb publish src/@orb.yml circleci/azure-cli@dev:${CIRCLE_SHA1:0:7} --token $CIRCLE_TOKEN
+
+  trigger-integration:
+    executor: github
+    parameters:
+      tag:
+        type: enum
+        default: "integration"
+        enum: ["integration", master]
+    steps:
+      - checkout
+
+      - add_ssh_keys:
+          fingerprints:
+            - "23:d1:63:44:ad:e7:1a:b0:45:5e:1e:e4:49:ea:63:4e"
+
+      - run:
+          name: git config
+          command: |
+            git config --global user.email "$CIRCLE_USERNAME@users.noreply.github.com"
+            git config --global user.name "$CIRCLE_USERNAME"
+
+      - run: |
+          INTEGRATION_TAG=<<parameters.tag>>-$CIRCLE_BRANCH-${CIRCLE_SHA1:0:7}
+          git tag $INTEGRATION_TAG
+          git push origin $INTEGRATION_TAG
+
+  test-orb:
+    executor: python
+    steps:
+      - azure-cli-tests
+
+  test-orb-non-python:
+    executor: golang
+    steps:
+      - azure-cli-tests
+
+  test-orb-docker-executor:
+    executor: azure-cli/azure-docker
+    steps:
+      - azure-cli-tests
+
+  dev-promote-prod:
+    executor: cli
+    steps:
+      - checkout
+      - run: circleci orb publish promote circleci/azure-cli@dev:${CIRCLE_SHA1:0:7} patch --token $CIRCLE_TOKEN
+
+integration_dev_filters: &integration_dev_filters
+  filters:
+    branches:
+      ignore: /.*/
+    tags:
+      only: /integration-.*/
+
+integration_master_filters: &integration_master_filters
+  filters:
+    branches:
+      ignore: /.*/
+    tags:
+      only: /master-.*/
+
+workflows:
+  validate_dev-deploy:
+    jobs:
+      - lint
+
+      - validate:
+          requires:
+            - lint
+
+      - publish-dev:
+          requires:
+            - validate
+          context: orb-publishing
+
+      - trigger-integration:
+          name: trigger-integration-dev
+          requires:
+            - publish-dev
+          filters:
+            branches:
+              ignore: master
+
+      - trigger-integration:
+          name: trigger-integration-master
+          tag: master
+          requires:
+            - publish-dev
+          filters:
+            branches:
+              only: master
+
+  integration_test-prod_deploy:
+    jobs:
+      - test-orb:                 *integration_dev_filters
+      - test-orb-docker-executor: *integration_dev_filters
+      - test-orb-non-python:      *integration_dev_filters
+
+      - test-orb:                 *integration_master_filters
+      - test-orb-docker-executor: *integration_master_filters
+      - test-orb-non-python:      *integration_master_filters
+
+      - dev-promote-prod:
+          context: orb-publishing
+          requires:
+            - test-orb
+            - test-orb-docker-executor
+            - test-orb-non-python
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /master-.*/
