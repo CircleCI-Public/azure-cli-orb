@@ -180,7 +180,7 @@ integration-master_filters: &integration-master_filters
     only: /master-.*/
 
 prod-deploy_requires: &prod-deploy_requires
-  [# x]
+  [test-orb-python_master, test-orb-azure_master, test-orb-golang_master]
 
 workflows:
   lint_pack-validate_publish-dev:
