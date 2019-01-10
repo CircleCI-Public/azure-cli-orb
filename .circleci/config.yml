@@ -138,19 +138,20 @@ jobs:
             git tag $INTEGRATION_TAG
             git push origin $INTEGRATION_TAG
 
-  test-orb:
+  test-orb-python:
     executor: python
     steps:
       - azure-cli-tests
 
-  test-orb-non-python:
+  test-orb-golang:
     executor: golang
     steps:
       - azure-cli-tests
 
-  test-orb-docker-executor:
+  test-orb-azure-docker:
     executor: azure-cli/azure-docker
     steps:
+      - run: az -v
       - azure-cli-tests
 
   dev-promote-prod:
@@ -220,29 +221,29 @@ workflows:
   integration_tests-prod_deploy:
     jobs:
       # triggered by non-master branch commits
-      - test-orb:
-          name: test-orb_dev
+      - test-orb-python:
+          name: test-orb-python_dev
           filters: *integration-dev_filters
 
-      - test-orb-docker-executor:
-          name: test-orb-docker_dev
+      - test-orb-azure-docker:
+          name: test-orb-azure_dev
           filters: *integration-dev_filters
 
-      - test-orb-non-python:
-          name: test-orb-non-python_dev
+      - test-orb-golang:
+          name: test-orb-golang_dev
           filters: *integration-dev_filters
 
       # triggered by master branch commits
-      - test-orb:
-          name: test-orb_master
+      - test-orb-python:
+          name: test-orb-python_master
           filters: *integration-master_filters
 
-      - test-orb-docker-executor:
-          name: test-orb-docker_master
+      - test-orb-azure-docker:
+          name: test-orb-azure_master
           filters: *integration-master_filters
 
-      - test-orb-non-python:
-          name: test-orb-non-python_master
+      - test-orb-golang:
+          name: test-orb-golang_master
           filters: *integration-master_filters
 
       # patch, minor, or major publishing
