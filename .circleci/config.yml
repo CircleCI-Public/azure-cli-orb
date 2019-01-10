@@ -49,10 +49,7 @@ commands:
 
       - run: az logout
 
-      - azure-cli/login-with-service-principal:
-          azure-username: $AZURE_SP_NAME
-          azure-password: $AZURE_SP_PASSWORD
-          azure-tenant: $AZURE_SP_TENANT
+      - azure-cli/login-with-service-principal
 
       - run:
           name: Verify login with Service Principal
@@ -62,7 +59,6 @@ commands:
 
       - azure-cli/login-with-user:
           alternate-tenant: true
-          azure-tenant: $AZURE_SP_TENANT
 
       - run:
           name: Verify login with user and alternate tenant
