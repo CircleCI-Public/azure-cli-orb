@@ -150,6 +150,7 @@ workflows:
       # patch, minor, or major publishing
       - orb-tools/dev-promote-prod:
           name: dev-promote-patch
+          orb-name: circleci/azure-cli
           context: orb-publishing
           requires: *prod-deploy_requires
           filters:
@@ -160,6 +161,7 @@ workflows:
 
       - orb-tools/dev-promote-prod:
           name: dev-promote-minor
+          orb-name: circleci/azure-cli
           release: minor
           context: orb-publishing
           requires: *prod-deploy_requires
@@ -171,6 +173,7 @@ workflows:
 
       - orb-tools/dev-promote-prod:
           name: dev-promote-major
+          orb-name: circleci/azure-cli
           release: major
           context: orb-publishing
           requires: *prod-deploy_requires
