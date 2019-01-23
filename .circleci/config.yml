@@ -43,11 +43,6 @@ commands:
           command: az resource list
 
 jobs:
-  # lint goes here: see workflow
-  # validate goes here: see workflow
-  # publish-dev goes here: see workflow
-  # trigger-integration goes here: see workflow
-
   test-orb-python:
     executor: python
     steps:
@@ -63,8 +58,6 @@ jobs:
     steps:
       - run: az -v
       - azure-cli-tests
-
-  # dev-promote-prod goes here: see workflow
 
 # yaml anchor filters
 integration-dev_filters: &integration-dev_filters
