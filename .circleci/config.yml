@@ -95,6 +95,7 @@ workflows:
 
       - orb-tools/trigger-integration-workflow:
           name: trigger-integration-dev
+          context: orb-publishing
           ssh-fingerprints: 23:d1:63:44:ad:e7:1a:b0:45:5e:1e:e4:49:ea:63:4e
           requires:
             - publish-dev
