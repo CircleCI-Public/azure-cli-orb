@@ -1,5 +1,5 @@
 description: >
-  Install the Azure CLI, then log in with a Service Principal
+  Log into Azure with a Service Principal
 
 usage:
   version: 2.1
@@ -9,11 +9,8 @@ usage:
 
   jobs:
     login-to-azure:
-      docker:
-        - image: circleci/python:2.7-stretch
+      executor: azure-cli/azure-docker
       steps:
-        - azure-cli/install
-
         - azure-cli/login-with-service-principal
 
         - run:

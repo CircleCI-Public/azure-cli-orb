@@ -9,8 +9,7 @@ usage:
 
   jobs:
     login-to-azure:
-      docker:
-        - image: circleci/python:2.7-stretch
+      executor: azure-cli/default
       steps:
         - azure-cli/install
 
