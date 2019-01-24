@@ -1,0 +1,26 @@
+description: >
+  Install the Azure CLI, then log in with a username and password
+
+usage:
+  version: 2.1
+
+  orbs:
+    azure-cli: circleci/azure-cli@1.0.0
+
+  jobs:
+    login-to-azure:
+      docker:
+        - image: circleci/python:2.7-stretch
+      steps:
+        - azure-cli/install
+
+        - azure-cli/login-with-user:
+            alternate-tenant: true
+
+        - run:
+            name: List resources of tenant stored as `AZURE_TENANT` env var
+            command: az resource list
+
+  workflows:
+    example-workflow:
+        - login-to-azure
