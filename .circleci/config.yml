@@ -35,8 +35,7 @@ commands:
 
       - run: az logout
 
-      - azure-cli/login-with-user:
-          alternate-tenant: true
+      - azure-cli/login-with-user
 
       - run:
           name: Verify login with user and alternate tenant

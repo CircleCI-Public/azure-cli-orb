@@ -1,20 +1,26 @@
 description: Initilize the Azure CLI
 
 parameters:
-  azure-username:
-    description: Azure account username or Service Principal name
+  azure-sp:
     type: env_var_name
-    default: AZURE_USERNAME
+    default: AZURE_SP
+    description: >
+      Name of environment variable storing the full name of the
+      Service Principal, in the form http://app-url
 
-  azure-password:
-    description: Azure account password or Service Principal password
+  azure-sp-password:
     type: env_var_name
-    default: AZURE_PASSWORD
+    default: AZURE_SP_PASSWORD
+    description: >
+      Name of environment variable storing the password for the
+      Service Principal
 
-  azure-tenant:
-    description: Tenant to sign in with
+  azure-sp-tenant:
     type: env_var_name
-    default: AZURE_TENANT
+    default: AZURE_SP_TENANT
+    description: >
+      Name of environment variable storing the tenant ID for the
+      Service Principal
 
 steps:
   - run:
@@ -22,6 +28,6 @@ steps:
       command: >
         az login \
           --service-principal \
-          --tenant $<<parameters.azure-tenant>> \
-          -u $<<parameters.azure-username>> \
-          -p $<<parameters.azure-password>>
+          --tenant $<<parameters.azure-sp-tenant>> \
+          -u $<<parameters.azure-sp>> \
+          -p $<<parameters.azure-sp-password>>
