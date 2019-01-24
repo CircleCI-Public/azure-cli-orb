@@ -6,6 +6,26 @@ A CircleCI Orb to install and log into the Azure CLI
 This orb offers the ability to login via an Azure user both on its default tenant and an alternative tenant.
 It also offers the ability to login via an Azure Service Principal.
 
+### Executors
+
+#### `default`
+Debian-based [`circleci/python` Docker image](https://hub.docker.com/r/circleci/python) to use
+
+##### Parameters
+
+| Parameter | type | default |
+|-----------|------|---------|
+| `python-version` | `string` | `2.7` |
+| `debian-release` | `string` | `stretch` |
+
+#### `azure-docker`
+Microsoft's [Azure CLI Docker image](https://hub.docker.com/r/microsoft/azure-cli):
+
+```yaml
+docker:
+  - image: microsoft/azure-cli
+```
+
 ### Commands
 You may use the following commands provided by this orb directly from your own job.
 
@@ -27,8 +47,7 @@ orbs:
 
 jobs:
   verify-install:
-    docker:
-      - image: circleci/python:2.7-stretch
+    executor: azure-cli/default
     steps:
       - azure-cli/install
 
@@ -63,8 +82,7 @@ orbs:
 
 jobs:
   login-to-azure:
-    docker:
-      - image: circleci/python:2.7-stretch
+    executor: azure-cli/default
     steps:
       - azure-cli/install
 
@@ -101,11 +119,8 @@ orbs:
 
 jobs:
   login-to-azure:
-    docker:
-      - image: circleci/python:2.7-stretch
+    executor: azure-cli/azure-docker
     steps:
-      - azure-cli/install
-
       - azure-cli/login-with-service-principal
 
       - run:
