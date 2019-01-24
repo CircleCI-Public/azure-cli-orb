@@ -23,4 +23,5 @@ usage:
 
   workflows:
     example-workflow:
+      jobs:
         - login-to-azure

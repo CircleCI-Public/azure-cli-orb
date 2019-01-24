@@ -77,6 +77,7 @@ jobs:
 
 workflows:
   example-workflow:
+    jobs:
       - login-to-azure
 ```
 
@@ -113,5 +114,6 @@ jobs:
 
 workflows:
   example-workflow:
-    - login-to-azure
+    jobs:
+      - login-to-azure
 ```
