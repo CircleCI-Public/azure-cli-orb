@@ -118,27 +118,33 @@ workflows:
       # triggered by non-master branch commits
       - test-orb-python:
           name: test-orb-python_dev
+          context: orb-publishing
           filters: *integration-dev_filters
 
       - test-orb-azure-docker:
           name: test-orb-azure_dev
+          context: orb-publishing
           filters: *integration-dev_filters
 
       - test-orb-golang:
           name: test-orb-golang_dev
+          context: orb-publishing
           filters: *integration-dev_filters
 
       # triggered by master branch commits
       - test-orb-python:
           name: test-orb-python_master
+          context: orb-publishing
           filters: *integration-master_filters
 
       - test-orb-azure-docker:
           name: test-orb-azure_master
+          context: orb-publishing
           filters: *integration-master_filters
 
       - test-orb-golang:
           name: test-orb-golang_master
+          context: orb-publishing
           filters: *integration-master_filters
 
       # patch, minor, or major publishing
