@@ -38,7 +38,7 @@ commands:
       - azure-cli/login-with-user
 
       - run:
-          name: Verify login with user and alternate tenant
+          name: Verify login with user
           command: az resource list
 
 jobs:
