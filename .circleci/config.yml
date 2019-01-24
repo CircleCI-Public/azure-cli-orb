@@ -30,15 +30,7 @@ commands:
       - azure-cli/login-with-service-principal
 
       - run:
-          name: Verify login with Service Principal
-          command: az resource list
-
-      - run: az logout
-
-      - azure-cli/login-with-user
-
-      - run:
-          name: Verify login with user
+          name: Verify login
           command: az resource list
 
 jobs:
