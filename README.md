@@ -69,7 +69,7 @@ workflows:
 |-----------|------|---------|-------------|
 | `azure-username` | `env_var_name` | `AZURE_USERNAME` | Environment variable storing your Azure username |
 | `azure-password` | `env_var_name` | `AZURE_PASSWORD` | Environment variable storing your Azure password |
-| `alternate-tenant` | `boolean` | `false` | Set to True to use the --tenant az login option |
+| `alternate-tenant` | `boolean` | `false` | Set to True to use the `--tenant az` login option |
 | `azure-tenant` | `env_var_name` | `AZURE_TENANT` | Environment variable storing your Azure tenant, necessary if `alternate-tenant` is set to true |
 
 ##### Example
