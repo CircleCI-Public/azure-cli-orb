@@ -1,0 +1,36 @@
+description: Initilize the Azure CLI
+
+parameters:
+  azure-username:
+    type: env_var_name
+    default: AZURE_USERNAME
+    description: >
+      Environment variable storing your Azure username
+
+  azure-password:
+    type: env_var_name
+    default: AZURE_PASSWORD
+    description:  >
+      Environment variable storing your Azure password
+
+  alternate-tenant:
+    description: Use an alternate tenant
+    type: boolean
+    default: false
+
+  azure-tenant:
+    type: env_var_name
+    default: AZURE_TENANT
+    description: >
+      Environment variable storing your Azure tenant,
+      necessary if `alternate-tenant` is set to true
+
+steps:
+  - run:
+      name: Login to the Azure CLI via username/password
+      command: >
+        az login \
+          <<#parameters.alternate-tenant>> \
+          --tenant $<<parameters.azure-tenant>> <</parameters.alternate-tenant>> \
+          -u $<<parameters.azure-username>> \
+          -p $<<parameters.azure-password>>

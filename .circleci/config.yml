@@ -1,0 +1,176 @@
+version: 2.1
+
+orbs:
+  azure-cli: circleci/azure-cli@dev:alpha
+  circle-compare-url: iynere/compare-url@0.4.5
+  cli: circleci/circleci-cli@0.1.2
+  orb-tools: circleci/orb-tools@6.0.0
+
+executors:
+  golang:
+    resource_class: small
+    docker:
+      - image: circleci/golang
+
+  python:
+    resource_class: small
+    docker:
+      - image: circleci/python:2.7-stretch
+
+commands:
+  azure-cli-tests:
+    description: "Verifies azure-cli install"
+    steps:
+      - azure-cli/install
+
+      - run:
+          name: Verify Azure install
+          command: az -v
+
+      - azure-cli/login-with-service-principal
+
+      - run:
+          name: Verify login
+          command: az resource list
+
+jobs:
+  test-orb-python:
+    executor: python
+    steps:
+      - azure-cli-tests
+
+  test-orb-golang:
+    executor: golang
+    steps:
+      - azure-cli-tests
+
+  test-orb-azure-docker:
+    executor: azure-cli/azure-docker
+    steps:
+      - run: az -v
+      - azure-cli-tests
+
+# yaml anchor filters
+integration-dev_filters: &integration-dev_filters
+  branches:
+    ignore: /.*/
+  tags:
+    only: /integration-.*/
+
+integration-master_filters: &integration-master_filters
+  branches:
+    ignore: /.*/
+  tags:
+    only: /master-.*/
+
+prod-deploy_requires: &prod-deploy_requires
+  [test-orb-python_master, test-orb-azure_master, test-orb-golang_master]
+
+workflows:
+  lint_pack-validate_publish-dev:
+    jobs:
+      - orb-tools/lint:
+          name: lint
+
+      - orb-tools/pack:
+          name: pack-validate
+          requires:
+            - lint
+
+      - orb-tools/publish-dev:
+          name: publish-dev
+          orb-name: circleci/azure-cli
+          context: orb-publishing
+          requires:
+            - pack-validate
+
+      - orb-tools/trigger-integration-workflow:
+          name: trigger-integration-dev
+          context: orb-publishing
+          ssh-fingerprints: 23:d1:63:44:ad:e7:1a:b0:45:5e:1e:e4:49:ea:63:4e
+          requires:
+            - publish-dev
+          filters:
+            branches:
+              ignore: master
+
+      - orb-tools/trigger-integration-workflow:
+          name: trigger-integration-master
+          context: orb-publishing
+          ssh-fingerprints: 23:d1:63:44:ad:e7:1a:b0:45:5e:1e:e4:49:ea:63:4e
+          tag: master
+          requires:
+            - publish-dev
+          filters:
+            branches:
+              only: master
+
+  integration_tests-prod_deploy:
+    jobs:
+      # triggered by non-master branch commits
+      - test-orb-python:
+          name: test-orb-python_dev
+          context: orb-publishing
+          filters: *integration-dev_filters
+
+      - test-orb-azure-docker:
+          name: test-orb-azure_dev
+          context: orb-publishing
+          filters: *integration-dev_filters
+
+      - test-orb-golang:
+          name: test-orb-golang_dev
+          context: orb-publishing
+          filters: *integration-dev_filters
+
+      # triggered by master branch commits
+      - test-orb-python:
+          name: test-orb-python_master
+          context: orb-publishing
+          filters: *integration-master_filters
+
+      - test-orb-azure-docker:
+          name: test-orb-azure_master
+          context: orb-publishing
+          filters: *integration-master_filters
+
+      - test-orb-golang:
+          name: test-orb-golang_master
+          context: orb-publishing
+          filters: *integration-master_filters
+
+      # patch, minor, or major publishing
+      - orb-tools/dev-promote-prod:
+          name: dev-promote-patch
+          orb-name: circleci/azure-cli
+          context: orb-publishing
+          requires: *prod-deploy_requires
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /master-patch.*/
+
+      - orb-tools/dev-promote-prod:
+          name: dev-promote-minor
+          orb-name: circleci/azure-cli
+          release: minor
+          context: orb-publishing
+          requires: *prod-deploy_requires
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /master-minor.*/
+
+      - orb-tools/dev-promote-prod:
+          name: dev-promote-major
+          orb-name: circleci/azure-cli
+          release: major
+          context: orb-publishing
+          requires: *prod-deploy_requires
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /master-major.*/

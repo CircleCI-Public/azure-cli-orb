@@ -1,0 +1,33 @@
+description: Initilize the Azure CLI
+
+parameters:
+  azure-sp:
+    type: env_var_name
+    default: AZURE_SP
+    description: >
+      Name of environment variable storing the full name of the
+      Service Principal, in the form http://app-url
+
+  azure-sp-password:
+    type: env_var_name
+    default: AZURE_SP_PASSWORD
+    description: >
+      Name of environment variable storing the password for the
+      Service Principal
+
+  azure-sp-tenant:
+    type: env_var_name
+    default: AZURE_SP_TENANT
+    description: >
+      Name of environment variable storing the tenant ID for the
+      Service Principal
+
+steps:
+  - run:
+      name: Login to the Azure CLI via Service Principal
+      command: >
+        az login \
+          --service-principal \
+          --tenant $<<parameters.azure-sp-tenant>> \
+          -u $<<parameters.azure-sp>> \
+          -p $<<parameters.azure-sp-password>>

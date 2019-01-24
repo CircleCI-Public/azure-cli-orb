@@ -1,0 +1,4 @@
+version: 2.1
+
+description: >
+  Install, initialize, and log into the Azure command-line interface (azcli)
