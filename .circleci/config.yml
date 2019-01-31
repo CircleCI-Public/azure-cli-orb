@@ -101,7 +101,7 @@ workflows:
             branches:
               only: master
 
-  integration_tests-prod_deploy:
+  integration-tests_prod-deploy:
     jobs:
       # triggered by non-master branch commits
       - test-orb-python:
