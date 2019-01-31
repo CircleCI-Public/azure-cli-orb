@@ -68,27 +68,24 @@ prod-deploy_requires: &prod-deploy_requires
 workflows:
   lint_pack-validate_publish-dev:
     jobs:
-      - orb-tools/lint:
-          name: lint
+      - orb-tools/lint
 
       - orb-tools/pack:
-          name: pack-validate
           requires:
-            - lint
+            - orb-tools/lint
 
       - orb-tools/publish-dev:
-          name: publish-dev
           orb-name: circleci/azure-cli
           context: orb-publishing
           requires:
-            - pack-validate
+            - orb-tools/pack
 
       - orb-tools/trigger-integration-workflow:
           name: trigger-integration-dev
           context: orb-publishing
           ssh-fingerprints: 23:d1:63:44:ad:e7:1a:b0:45:5e:1e:e4:49:ea:63:4e
           requires:
-            - publish-dev
+            - orb-tools/publish-dev
           filters:
             branches:
               ignore: master
@@ -99,7 +96,7 @@ workflows:
           ssh-fingerprints: 23:d1:63:44:ad:e7:1a:b0:45:5e:1e:e4:49:ea:63:4e
           tag: master
           requires:
-            - publish-dev
+            - orb-tools/publish-dev
           filters:
             branches:
               only: master
