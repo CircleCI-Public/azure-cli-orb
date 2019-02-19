@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   azure-cli: circleci/azure-cli@dev:alpha
   cli: circleci/circleci-cli@0.1.2
-  orb-tools: circleci/orb-tools@7.3.0
+  orb-tools: circleci/orb-tools@8.1.0
 
 executors:
   golang:
@@ -84,6 +84,7 @@ workflows:
           name: trigger-integration-dev
           context: orb-publishing
           ssh-fingerprints: 23:d1:63:44:ad:e7:1a:b0:45:5e:1e:e4:49:ea:63:4e
+          cleanup-tags: true
           requires:
             - orb-tools/publish-dev
           filters:
@@ -94,6 +95,7 @@ workflows:
           name: trigger-integration-master
           context: orb-publishing
           ssh-fingerprints: 23:d1:63:44:ad:e7:1a:b0:45:5e:1e:e4:49:ea:63:4e
+          cleanup-tags: true
           tag: master
           requires:
             - orb-tools/publish-dev
