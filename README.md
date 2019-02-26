@@ -1,4 +1,4 @@
-# Azure CLI Orb  ![CircleCI status](https://circleci.com/gh/CircleCI-Public/azure-cli-orb.svg "CircleCI status")
+# Azure CLI Orb  ![CircleCI status](https://circleci.com/gh/CircleCI-Public/azure-cli-orb.svg "CircleCI status") [![CircleCI Orb Version](https://img.shields.io/badge/endpoint.svg?url=https://badges.circleci.io/orb/circleci/azure-cli)](https://circleci.com/orbs/registry/orb/circleci/azure-cli)
 
 A CircleCI Orb to install and log into the Azure CLI
 
