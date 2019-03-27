@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   azure-cli: circleci/azure-cli@dev:alpha
   cli: circleci/circleci-cli@0.1.2
-  orb-tools: circleci/orb-tools@8.1.0
+  orb-tools: circleci/orb-tools@8.5.0
 
 executors:
   golang:
