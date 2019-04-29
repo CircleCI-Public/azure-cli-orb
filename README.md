@@ -141,13 +141,13 @@ workflows:
 
 | Parameter | type | default | description |
 |-----------|------|---------|-------------|
-| `azure-username` | `env_var_name` | `AZURE_USERNAME` | Environment variable storing your Azure username |
-| `azure-password` | `env_var_name` | `AZURE_PASSWORD` | Environment variable storing your Azure password |
-| `alternate-tenant` | `boolean` | `false` | Set to True to use the `--tenant az` login option |
-| `azure-tenant` | `env_var_name` | `AZURE_TENANT` | Environment variable storing your Azure tenant, necessary if `alternate-tenant` is set to true |
-| `azure-sp` | `env_var_name` | `AZURE_SP` | Name of environment variable storing the full name of the Service Principal, in the form `http://app-url` |
-| `azure-sp-password` | `env_var_name` | `AZURE_SP_PASSWORD` | Name of environment variable storing the password for the Service Principal |
-| `azure-sp-tenant` | `env_var_name` |  `AZURE_SP_TENANT` | Name of environment variable storing the tenant ID for the Service Principal |
+| `azure-username` | `env_var_name` | `AZURE_USERNAME` | Environment variable storing your Azure username. Only applicable for user logins. |
+| `azure-password` | `env_var_name` | `AZURE_PASSWORD` | Environment variable storing your Azure password. Only applicable for user logins. |
+| `alternate-tenant` | `boolean` | `false` | Set to True to use the `--tenant az` login option. Only applicable for user logins. |
+| `azure-tenant` | `env_var_name` | `AZURE_TENANT` | Environment variable storing your Azure tenant, necessary if `alternate-tenant` is set to true. Only applicable for user logins. |
+| `azure-sp` | `env_var_name` | `AZURE_SP` | Name of environment variable storing the full name of the Service Principal, in the form `http://app-url`. Only applicable for Service Principal logins. |
+| `azure-sp-password` | `env_var_name` | `AZURE_SP_PASSWORD` | Name of environment variable storing the password for the Service Principal. Only applicable for Service Principal logins. |
+| `azure-sp-tenant` | `env_var_name` |  `AZURE_SP_TENANT` | Name of environment variable storing the tenant ID for the Service Principal. Only applicable for Service Principal logins. |
 
 ##### Example
 
