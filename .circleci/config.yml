@@ -19,6 +19,19 @@ executors:
 commands:
   azure-cli-tests:
     description: "Verifies azure-cli install"
+    parameters:
+      login-with-service-principal:
+        type: boolean
+        default: false
+        description: Logs in with service principal
+      login-with-user:
+        type: boolean
+        default: false
+        description: Logs in with user
+      detect-login-type:
+        type: boolean
+        default: false
+        description: Detect the type of login to be performed
     steps:
       - azure-cli/install
 
@@ -26,7 +39,20 @@ commands:
           name: Verify Azure install
           command: az -v
 
-      - azure-cli/login-with-service-principal
+      - when:
+          condition: << parameters.login-with-service-principal >>
+          steps:
+            - azure-cli/login-with-service-principal
+
+      - when:
+          condition: << parameters.login-with-user >>
+          steps:
+            - azure-cli/login-with-user
+
+      - when:
+          condition: << parameters.detect-login-type >>
+          steps:
+            - azure-cli/login-with-user-or-service-principal
 
       - run:
           name: Verify login
@@ -36,18 +62,21 @@ jobs:
   test-orb-python:
     executor: python
     steps:
-      - azure-cli-tests
+      - azure-cli-tests:
+          detect-login-type: true
 
   test-orb-golang:
     executor: golang
     steps:
-      - azure-cli-tests
+      - azure-cli-tests:
+          login-with-service-principal: true
 
   test-orb-azure-docker:
     executor: azure-cli/azure-docker
     steps:
       - run: az -v
-      - azure-cli-tests
+      - azure-cli-tests:
+          login-with-service-principal: true
 
 # yaml anchor filters
 integration-dev_filters: &integration-dev_filters
