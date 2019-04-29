@@ -32,7 +32,7 @@ parameters:
       Environment variable storing your Azure tenant,
       necessary if `alternate-tenant` is set to true.
       Only applicable for user logins.
-  
+
   azure-sp:
     type: env_var_name
     default: AZURE_SP
