@@ -1,0 +1,24 @@
+description: >
+  Log into Azure with the login type determined based on
+  environment variable detection.
+
+usage:
+  version: 2.1
+
+  orbs:
+    azure-cli: circleci/azure-cli@1.0.0
+
+  jobs:
+    login-to-azure:
+      executor: azure-cli/azure-docker
+      steps:
+        - azure-cli/login-with-user-or-service-principal
+
+        - run:
+            name: List resources of tenant stored as `AZURE_SP_TENANT` env var
+            command: az resource list
+
+  workflows:
+    example-workflow:
+      jobs:
+        - login-to-azure
