@@ -109,6 +109,7 @@ workflows:
             - orb-tools/publish-dev
 
   integration-tests_prod-deploy:
+    when: << pipeline.parameters.run-integration-tests >>
     jobs:
       # triggered by non-master branch commits
       - test-orb-python:
