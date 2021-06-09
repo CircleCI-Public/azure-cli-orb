@@ -112,15 +112,12 @@ workflows:
     jobs:
       # triggered by non-master branch commits
       - test-orb-python:
-          name: test-orb-python_dev
           context: orb-publishing
 
       - test-orb-azure-docker:
-          name: test-orb-azure_dev
           context: orb-publishing
 
       - test-orb-golang:
-          name: test-orb-golang_dev
           context: orb-publishing
 
       - orb-tools/dev-promote-prod-from-commit-subject:
@@ -133,9 +130,9 @@ workflows:
           publish-version-tag: true
           ssh-fingerprints: 23:d1:63:44:ad:e7:1a:b0:45:5e:1e:e4:49:ea:63:4e
           requires:
-            - test-orb-python_master
-            - test-orb-azure_master
-            - test-orb-golang_master
+            - test-orb-python
+            - test-orb-azure-docker
+            - test-orb-golang
           filters:
             branches:
               only: master
