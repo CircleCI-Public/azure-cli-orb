@@ -113,13 +113,13 @@ workflows:
     jobs:
       # triggered by non-master branch commits
       - test-orb-python:
-          context: orb-publishing
+          context: azure-cli-orb-testing
 
       - test-orb-azure-docker:
-          context: orb-publishing
+          context: azure-cli-orb-testing
 
       - test-orb-golang:
-          context: orb-publishing
+          context: azure-cli-orb-testing
 
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: circleci/azure-cli
