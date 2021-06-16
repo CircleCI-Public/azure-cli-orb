@@ -23,7 +23,7 @@ Microsoft's [Azure CLI Docker image](https://hub.docker.com/r/microsoft/azure-cl
 
 ```yaml
 docker:
-  - image: microsoft/azure-cli
+  - image: mcr.microsoft.com/azure-cli
 ```
 
 ### Commands
