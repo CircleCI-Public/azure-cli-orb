@@ -31,3 +31,4 @@ steps:
           --tenant $<<parameters.azure-sp-tenant>> \
           -u $<<parameters.azure-sp>> \
           -p "$<<parameters.azure-sp-password>>"
+          
