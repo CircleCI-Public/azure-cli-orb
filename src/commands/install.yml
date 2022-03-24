@@ -19,7 +19,7 @@ steps:
 
         # https://github.com/CircleCI-Public/azure-cli-orb/issues/15
         # https://manpages.debian.org/unstable/apt/apt-get.8.en.html
-        $SUDO apt-get --allow-releaseinfo-change update && $SUDO apt-get -qqy install apt-transport-https
+        $SUDO apt-get --allow-releaseinfo-change-suite update && $SUDO apt-get -qqy install apt-transport-https
 
         if [[ $(command -v lsb_release) == "" ]]; then
           echo "Installing lsb_release"
@@ -47,7 +47,7 @@ steps:
 
         # https://github.com/CircleCI-Public/azure-cli-orb/issues/15
         # https://manpages.debian.org/unstable/apt/apt-get.8.en.html
-        $SUDO apt-get --allow-releaseinfo-change update
+        $SUDO apt-get --allow-releaseinfo-change-suite update
         $SUDO apt-get -qqy install \
           ca-certificates \
           azure-cli
