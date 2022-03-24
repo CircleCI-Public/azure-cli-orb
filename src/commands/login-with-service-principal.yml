@@ -30,4 +30,4 @@ steps:
           --service-principal \
           --tenant $<<parameters.azure-sp-tenant>> \
           -u $<<parameters.azure-sp>> \
-          -p $<<parameters.azure-sp-password>>
+          -p "$<<parameters.azure-sp-password>>"
