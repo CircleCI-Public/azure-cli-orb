@@ -19,7 +19,7 @@ executors:
   go:
     resource_class: small
     docker:
-      - image: cimg/go:1.18.0
+      - image: cimg/go:1.18
 
   python:
     resource_class: small
