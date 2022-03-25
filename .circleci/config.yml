@@ -16,10 +16,10 @@ parameters:
     default: "dev:alpha"
 
 executors:
-  go:
+  golang:
     resource_class: small
     docker:
-      - image: cimg/go:1.18
+      - image: circleci/golang
 
   python:
     resource_class: small
@@ -76,7 +76,7 @@ jobs:
           detect-login-type: true
 
   test-orb-golang:
-    executor: go
+    executor: golang
     steps:
       - azure-cli-tests:
           login-with-service-principal: true
