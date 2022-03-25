@@ -16,7 +16,7 @@ parameters:
     default: "dev:alpha"
 
 executors:
-  golang:
+  go:
     resource_class: small
     docker:
       - image: cimg/go:1.18.0
