@@ -24,7 +24,7 @@ executors:
   python:
     resource_class: small
     docker:
-      - image: circleci/python:2.7-stretch
+      - image: cimg/python:3.10.2
 
 commands:
   azure-cli-tests:

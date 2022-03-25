@@ -17,7 +17,9 @@ steps:
 
         if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
 
-        $SUDO apt-get update && $SUDO apt-get -qqy install apt-transport-https
+        # https://github.com/CircleCI-Public/azure-cli-orb/issues/15
+        # https://manpages.debian.org/unstable/apt/apt-get.8.en.html
+        $SUDO apt-get --allow-releaseinfo-change-suite update && $SUDO apt-get -qqy install apt-transport-https
 
         if [[ $(command -v lsb_release) == "" ]]; then
           echo "Installing lsb_release"
@@ -43,7 +45,9 @@ steps:
 
         # Update and install the Azure CLI
 
-        $SUDO apt-get update
+        # https://github.com/CircleCI-Public/azure-cli-orb/issues/15
+        # https://manpages.debian.org/unstable/apt/apt-get.8.en.html
+        $SUDO apt-get --allow-releaseinfo-change-suite update
         $SUDO apt-get -qqy install \
           ca-certificates \
           azure-cli
