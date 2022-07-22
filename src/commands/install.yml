@@ -4,6 +4,7 @@ description: >
 steps:
   - run:
       name: Install Azure CLI, if not available
+      no_output_timeout: 20m      
       command: |
         # Verify the CLI isn't already installed
         # Use which instead of command -v for wider coverage of envs
