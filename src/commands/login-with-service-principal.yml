@@ -28,6 +28,6 @@ steps:
       command: >
         az login \
           --service-principal \
-          --tenant $<<parameters.azure-sp-tenant>> \
-          -u $<<parameters.azure-sp>> \
-          -p "$<<parameters.azure-sp-password>>"
+          --tenant=$<<parameters.azure-sp-tenant>> \
+          -u=$<<parameters.azure-sp>> \
+          -p="$<<parameters.azure-sp-password>>"
