@@ -63,16 +63,16 @@ steps:
           echo "User credentials detected; logging in with user"
           az login \
             <<#parameters.alternate-tenant>> \
-            --tenant $<<parameters.azure-tenant>> <</parameters.alternate-tenant>> \
-            -u $<<parameters.azure-username>> \
-            -p "$<<parameters.azure-password>>"
+            --tenant=$<<parameters.azure-tenant>> <</parameters.alternate-tenant>> \
+            -u=$<<parameters.azure-username>> \
+            -p="$<<parameters.azure-password>>"
         elif [ -n "${<< parameters.azure-sp >>}" ]; then
           echo "Service Principal credentials detected; logging in with Service Principal"
           az login \
             --service-principal \
-            --tenant $<<parameters.azure-sp-tenant>> \
-            -u $<<parameters.azure-sp>> \
-            -p "$<<parameters.azure-sp-password>>"
+            --tenant=$<<parameters.azure-sp-tenant>> \
+            -u=$<<parameters.azure-sp>> \
+            -p="$<<parameters.azure-sp-password>>"
         else
           echo "Login failed; neither user nor Service Principal credentials were provided"
           exit 1
