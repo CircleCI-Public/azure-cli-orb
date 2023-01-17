@@ -4,7 +4,7 @@ A CircleCI Orb to install and log into the Azure CLI
 
 ## Features
 This orb offers the ability to login via an Azure user both on its default tenant and an alternative tenant.
-It also offers the ability to login via an Azure Service Principal.
+It also offers the ability to login via an Azure Service Principal, using either a password or OIDC.
 
 ### Executors
 
@@ -34,6 +34,8 @@ You may use the following commands provided by this orb directly from your own j
 - [**login-with-user**](#login-with-user) - Allows you to login to the Azure CLI with an Azure user.
 
 - [**login-with-service-principal**](#login-with-service-principal) - Allows you to login to the Azure CLI with a Service Principal
+
+- [**login-with-oidc**](#login-with-oidc) - Allows you to login to the Azure CLI with a Service Principal using OIDC
 
 - [**login-with-user-or-service-principal**](#login-with-user-or-service-principal) - Allows you to login to the Azure CLI, where the login type (user/Service Principal) is determined based on detection of the relevant environment variables.
 
@@ -124,6 +126,39 @@ jobs:
     executor: azure-cli/azure-docker
     steps:
       - azure-cli/login-with-service-principal
+
+      - run:
+          name: List resources of tenant stored as `AZURE_SP_TENANT` env var
+          command: az resource list
+
+workflows:
+  example-workflow:
+    jobs:
+      - login-to-azure
+```
+
+#### `login-with-oidc`
+
+##### Parameters
+
+| Parameter | type | default | description |
+|-----------|------|---------|-------------|
+| `azure-sp` | `env_var_name` | `AZURE_SP` | Name of environment variable storing the full name of the Service Principal, in the form `http://app-url` |
+| `azure-sp-tenant` | `env_var_name` |  `AZURE_SP_TENANT` | Name of environment variable storing the tenant ID for the Service Principal |
+
+##### Example
+
+```yaml
+version: 2.1
+
+orbs:
+  azure-cli: circleci/azure-cli@1.0.0
+
+jobs:
+  login-to-azure:
+    executor: azure-cli/azure-docker
+    steps:
+      - azure-cli/login-with-oidc
 
       - run:
           name: List resources of tenant stored as `AZURE_SP_TENANT` env var
