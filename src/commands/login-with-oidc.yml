@@ -1,4 +1,4 @@
-description: Initilize the Azure CLI using OpenID Connect authentication with Azure Active Directory
+description: Initilize the Azure CLI with a Service Principal using OIDC
 
 parameters:
   azure-sp:
