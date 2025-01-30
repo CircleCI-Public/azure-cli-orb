@@ -95,8 +95,11 @@ workflows:
           vcs_type: << pipeline.project.type >>
           pub_type: production
           requires:
-            - test-orb-python
-            - test-orb-golang
-            - test-orb-azure-docker
+            - test-orb-python:
+              filters: *filters
+            - test-orb-golang:
+              filters: *filters
+            - test-orb-azure-docker:
+              filters: *filters
           context: azure-acr-orb
           filters: *release-filters
