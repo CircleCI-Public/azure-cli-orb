@@ -20,7 +20,7 @@ workflows:
       - shellcheck/check:
           filters: *filters
       - orb-tools/continue:
-          orb-name: azure-cli
+          orb_name: azure-cli
           pipeline_number: << pipeline.number >>
           vcs_type: << pipeline.project.type >>
           requires:
