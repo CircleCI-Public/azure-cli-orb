@@ -25,9 +25,4 @@ parameters:
 steps:
   - run:
       name: Login to the Azure CLI via Service Principal
-      command: >
-        az login \
-          --service-principal \
-          --tenant $<<parameters.azure-sp-tenant>> \
-          -u $<<parameters.azure-sp>> \
-          -p "$<<parameters.azure-sp-password>>"
+      command: << include(scripts/login-with-service-principal.sh) >>
