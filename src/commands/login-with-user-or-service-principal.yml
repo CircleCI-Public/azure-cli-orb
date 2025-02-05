@@ -59,11 +59,11 @@ steps:
   - run:
       name: Login to the Azure CLI with user or Service Principal
       environment:
-        AZURE_USERNAME: $<<parameters.azure-username>>
-        ALTERNATE_TENANT: $<<parameters.alternate-tenant>>
-        AZURE_TENANT: $<<parameters.azure-tenant>>
-        AZURE_PASSWORD: $<<parameters.azure-password>>
-        AZURE_SP: $<<parameters.azure-sp>>
+        AZURE_USERNAME: <<parameters.azure-username>>
+        ALTERNATE_TENANT: <<parameters.alternate-tenant>>
+        AZURE_TENANT: <<parameters.azure-tenant>>
+        AZURE_PASSWORD: <<parameters.azure-password>>
+        AZURE_SP: <<parameters.azure-sp>>
         AZURE_SP_TENANT: $<<parameters.azure-sp-tenant>>
         AZURE_SP_PASSWORD: $<<parameters.azure-sp-password>>
       command: <<include(scripts/login-with-user-or-service-principal.sh)>>
