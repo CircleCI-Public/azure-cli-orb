@@ -2,7 +2,7 @@
 
 TENANT=""
 if [[ -z "$ALTERNATE_TENANT" ]]; then
-  TENANT="--tenant \"$AZURE_TENANT\""
+  TENANT="--tenant \"$AZURE_TENANT_V\""
 fi
 set -x
 if [ -n "${AZURE_USERNAME}" ]; then
