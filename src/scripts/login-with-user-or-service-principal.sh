@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-AZURE_USERNAME_V="$(eval echo \"$AZURE_USERNAME\")"
+AZURE_USERNAME_V="$(eval echo "$AZURE_USERNAME")"
 
 TENANT=""
 if [[ -z "$ALTERNATE_TENANT" ]]; then
