@@ -11,4 +11,5 @@ parameters:
     default: "stretch"
 
 docker:
-  - image: circleci/python:<<parameters.python-version>>-<<parameters.debian-release>>
+  - image: >
+      circleci/python:<<parameters.python-version>>-<<parameters.debian-release>>
