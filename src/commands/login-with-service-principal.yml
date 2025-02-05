@@ -27,6 +27,6 @@ steps:
       environment:
         AZURE_SP: << parameters.azure-sp >>
         AZURE_SP_PASSWORD: << parameters.azure-sp-password >>
-        AZURE_SP_TENANT: << parmeters.azure-sp-tenant >>
+        AZURE_SP_TENANT: << parameters.azure-sp-tenant >>
       name: Login to the Azure CLI via Service Principal
       command: << include(scripts/login-with-service-principal.sh) >>
