@@ -1,3 +1,4 @@
+---
 description: >
   Log into Azure with the login type determined based on
   environment variable detection.

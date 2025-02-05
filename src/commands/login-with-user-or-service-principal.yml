@@ -1,3 +1,4 @@
+---
 description: >
   Initilize the Azure CLI. Supports login either with a user or with a Service
   Principal. The type of login is determined by checking if the environment
