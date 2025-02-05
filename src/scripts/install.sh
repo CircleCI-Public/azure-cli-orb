@@ -22,7 +22,7 @@ if [[ $(command -v lsb_release) == "" ]]; then
 fi
 
 # Create an environment variable for the correct distribution
-export AZ_REPO=$(lsb_release -cs)
+export AZ_REPO="$(lsb_release -cs)"
 
 # Modify your sources list
 

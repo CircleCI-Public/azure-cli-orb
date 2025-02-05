@@ -16,9 +16,9 @@ elif [ -n "${AZURE_SP}" ]; then
   az login \
     --service-principal \
     --tenant "$AZURE_SP_TENANT" \
-    -u "$AZURE_SP"" \
+    -u "$AZURE_SP" \
     -p "$AZURE_SP_PASSWORD"
 else
-  echo "Login failed; neither user nor Service Principal credentials were provided"
+  echo 'Login failed; neither user nor Service Principal credentials were provided'
   exit 1
 fi
