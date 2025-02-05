@@ -1,10 +1,10 @@
-#!/usr/bin/env bash -x
+#!/usr/bin/env bash
 
 TENANT=""
 if [[ -z "$ALTERNATE_TENANT" ]]; then
   TENANT="--tenant \"$AZURE_TENANT\""
 fi
-
+set -x
 if [ -n "${AZURE_USERNAME}" ]; then
   echo "User credentials detected; logging in with user"
   az login "$TENANT" \
@@ -21,3 +21,4 @@ else
   echo 'Login failed; neither user nor Service Principal credentials were provided'
   exit 1
 fi
+set +x
