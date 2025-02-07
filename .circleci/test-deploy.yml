@@ -73,7 +73,7 @@ jobs:
     executor: python
     steps:
       - azure-cli-tests:
-          detect-login-type: true
+          login-with-service-principal: true
 
   test-orb-golang:
     executor: golang
