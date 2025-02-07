@@ -2,7 +2,7 @@
 
 set -x
 
-AZ_USER="$(eval echo "$AZURE_USERNAME")"
+AZ_USER="$(echo ${!AZURE_USERNAME})"
 
 TENANT=""
 if [[ -z "$ALTERNATE_TENANT" ]]; then
