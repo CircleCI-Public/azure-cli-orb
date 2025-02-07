@@ -3,7 +3,7 @@
 set -x
 
 
-if [[ "${!ALTERNATE_TENANT}" -eq 1 ]]; then
+if [[ -n "${!ALTERNATE_TENANT}" ]]; then
   az login  \
       "--tenant ${!$AZURE_TENANT}" \
       -u "${!AZURE_USERNAME}" \
