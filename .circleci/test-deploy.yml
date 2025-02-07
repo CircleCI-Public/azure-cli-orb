@@ -52,7 +52,10 @@ commands:
       - when:
           condition: << parameters.login-with-service-principal >>
           steps:
-            - azure-cli/login-with-service-principal
+            - azure-cli/login-with-service-principal:
+                azure-sp-tenant: AZURE_TENANT_ID
+                azure-sp: AZURE_APP_ID
+                azure-sp-password: AZURE_SECRET_VALUE
 
       - when:
           condition: << parameters.login-with-user >>
