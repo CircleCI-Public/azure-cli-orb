@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 
-set -x
-
-AZ_USER="${!AZURE_USERNAME}"
+AZURE_USERNAME="$(eval echo "${AZURE_USERNAME}" | circleci env subst)"
+AZURE_PASSWORD="$(eval echo "${AZURE_PASSWORD}" | circleci env subst)"
+AZURE_TENANT="$(eval echo "${AZURE_TENANT}" | circleci env subst)"
+AZURE_SP="$(eval echo "${AZURE_SP}" | circleci env subst)"
+AZURE_SP_PASSWORD="$(eval echo "${AZURE_SP_PASSWORD}" | circleci env subst)"
+AZURE_SP_TENANT="$(eval echo "${AZURE_SP_TENANT}" | circleci env subst)"
 
 TENANT=""
 if [[ -z "$ALTERNATE_TENANT" ]]; then
   TENANT="--tenant \"$AZURE_TENANT\""
 fi
 
-if [ -n "${AZ_USER}" ]; then
+if [ -n "${AZURE_USERNAME}" ]; then
   echo "User credentials detected; logging in with user"
   az login "$TENANT" \
-    -u "$AZ_USER" \
+    -u "$AZURE_USERNAME" \
     -p "$AZURE_PASSWORD"
 elif [ -n "${AZURE_SP}" ]; then
   echo "Service Principal credentials detected; logging in with Service Principal"
@@ -25,4 +28,3 @@ else
   echo 'Login failed; neither user nor Service Principal credentials were provided'
   exit 1
 fi
-set +x
