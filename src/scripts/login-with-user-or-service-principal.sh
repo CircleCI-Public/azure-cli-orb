@@ -10,6 +10,7 @@ fi
 if [ -n "${!AZURE_USERNAME}" ]; then
   echo "User credentials detected; logging in with user"
   az login  \
+    "$TENANT" \
     -u "${!AZURE_USERNAME}" \
     -p "${!AZURE_PASSWORD}"
 elif [ -n "${!AZURE_SP}" ]; then
