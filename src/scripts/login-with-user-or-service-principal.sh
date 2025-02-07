@@ -2,12 +2,19 @@
 
 set -x
 
-AZURE_USERNAME="$(eval echo "${AZURE_USERNAME}" | circleci env subst)"
-AZURE_PASSWORD="$(eval echo "${AZURE_PASSWORD}" | circleci env subst)"
-AZURE_TENANT="$(eval echo "${AZURE_TENANT}" | circleci env subst)"
-AZURE_SP="$(eval echo "${AZURE_SP}" | circleci env subst)"
-AZURE_SP_PASSWORD="$(eval echo "${AZURE_SP_PASSWORD}" | circleci env subst)"
-AZURE_SP_TENANT="$(eval echo "${AZURE_SP_TENANT}" | circleci env subst)"
+#AZURE_USERNAME="$(eval echo "${AZURE_USERNAME}" | circleci env subst)"
+#AZURE_PASSWORD="$(eval echo "${AZURE_PASSWORD}" | circleci env subst)"
+#AZURE_TENANT="$(eval echo "${AZURE_TENANT}" | circleci env subst)"
+#AZURE_SP="$(eval echo "${AZURE_SP}" | circleci env subst)"
+#AZURE_SP_PASSWORD="$(eval echo "${AZURE_SP_PASSWORD}" | circleci env subst)"
+#AZURE_SP_TENANT="$(eval echo "${AZURE_SP_TENANT}" | circleci env subst)"
+
+AZURE_USERNAME="${!AZURE_USERNAME}"
+AZURE_PASSWORD="${!AZURE_PASSWORD}"
+AZURE_TENANT="${!AZURE_TENANT}"
+AZURE_SP="${!AZURE_SP}"
+AZURE_SP_PASSWORD="${!AZURE_SP_PASSWORD}"
+AZURE_SP_TENANT="${!AZURE_SP_TENANT}"
 
 #TENANT=""
 #if [[ "$ALTERNATE_TENANT" -eq 1 ]]; then
