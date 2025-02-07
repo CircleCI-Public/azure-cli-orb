@@ -92,14 +92,14 @@ workflows:
   test-deploy:
     jobs:
       - test-orb-python:
-        context: azure-acr-orb
-        filters: *filters
+          context: azure-acr-orb
+          filters: *filters
       - test-orb-golang:
-        context: azure-acr-orb
-        filters: *filters
+          context: azure-acr-orb
+          filters: *filters
       - test-orb-azure-docker:
-        context: azure-acr-orb
-        filters: *filters
+          context: azure-acr-orb
+          filters: *filters
       - orb-tools/publish:
           orb_name: azure-cli
           vcs_type: << pipeline.project.type >>
