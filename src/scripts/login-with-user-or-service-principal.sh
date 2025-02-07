@@ -9,14 +9,14 @@ AZURE_SP="$(eval echo "${AZURE_SP}" | circleci env subst)"
 AZURE_SP_PASSWORD="$(eval echo "${AZURE_SP_PASSWORD}" | circleci env subst)"
 AZURE_SP_TENANT="$(eval echo "${AZURE_SP_TENANT}" | circleci env subst)"
 
-TENANT=""
-if [[ -z "$ALTERNATE_TENANT" ]]; then
-  TENANT="--tenant \"$AZURE_TENANT\""
-fi
+#TENANT=""
+#if [[ "$ALTERNATE_TENANT" -eq 1 ]]; then
+#  TENANT="--tenant \"$AZURE_TENANT\""
+#fi
 
 if [ -n "${AZURE_USERNAME}" ]; then
   echo "User credentials detected; logging in with user"
-  az login "$TENANT" \
+  az login  \
     -u "$AZURE_USERNAME" \
     -p "$AZURE_PASSWORD"
 elif [ -n "${AZURE_SP}" ]; then
