@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
+set -x
+
 AZ_USER="$(eval echo "$AZURE_USERNAME")"
 
 TENANT=""
 if [[ -z "$ALTERNATE_TENANT" ]]; then
   TENANT="--tenant \"$AZURE_TENANT\""
 fi
-set -x
+
 if [ -n "${AZ_USER}" ]; then
   echo "User credentials detected; logging in with user"
   az login "$TENANT" \
