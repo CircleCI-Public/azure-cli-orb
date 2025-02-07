@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
-
-
-if [[ -n "${!ALTERNATE_TENANT}" ]]; then
+if [[ ! "${!ALTERNATE_TENANT}" = "false" ]]; then
   az login  \
       "--tenant ${!$AZURE_TENANT}" \
       -u "${!AZURE_USERNAME}" \
@@ -31,5 +28,3 @@ fi
 
 echo 'Login failed; neither user nor Service Principal credentials were provided'
 exit 1
-
-set +x

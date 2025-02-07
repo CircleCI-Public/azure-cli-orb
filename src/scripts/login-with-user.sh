@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 
-TENANT=""
-if [[ -n "$ALTERNATE_TENANT" ]]; then
-  TENANT="--tenant \"$AZURE_TENANT\""
+if [[ ! "${!ALTERNATE_TENANT}" = "false" ]]; then
+  az login  \
+      "--tenant ${!$AZURE_TENANT}" \
+      -u "${!AZURE_USERNAME}" \
+      -p "${!AZURE_PASSWORD}"
+    exit 0
 fi
 
-az login \
-  "$TENANT" \
-  -u "$AZURE_USERNAME" \
-  -p "$AZURE_PASSWORD"
+if [ -n "${!AZURE_USERNAME}" ]; then
+  echo "User credentials detected; logging in with user"
+  az login  \
+    -u "${!AZURE_USERNAME}" \
+    -p "${!AZURE_PASSWORD}"
+  exit 0
+fi
