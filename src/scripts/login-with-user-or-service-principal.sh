@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 AZURE_USERNAME="$(eval echo "${AZURE_USERNAME}" | circleci env subst)"
 AZURE_PASSWORD="$(eval echo "${AZURE_PASSWORD}" | circleci env subst)"
 AZURE_TENANT="$(eval echo "${AZURE_TENANT}" | circleci env subst)"
@@ -28,3 +30,5 @@ else
   echo 'Login failed; neither user nor Service Principal credentials were provided'
   exit 1
 fi
+
+set +x
