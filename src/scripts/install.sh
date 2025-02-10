@@ -35,15 +35,24 @@ if [[ $(command -v curl) == "" ]]; then
   $SUDO apt-get -qqy install curl
 fi
 
-# Get the Microsoft signing key
+if [[ $(command -v gpg) == "" ]]; then
+  echo "Installing gpg"
+  $SUDO apt-get -qqy install gnupg
+fi
 
-curl -L https://packages.microsoft.com/keys/microsoft.asc | $SUDO apt-key add -
+# Get the Microsoft signing key
+echo "Install Microsoft signing key"
+curl -sL https://packages.microsoft.com/keys/microsoft.asc |
+  gpg --dearmor |
+  $SUDO tee /etc/apt/trusted.gpg.d/microsoft.gpg >/dev/null
 
 # Update and install the Azure CLI
 
 # https://github.com/CircleCI-Public/azure-cli-orb/issues/15
 # https://manpages.debian.org/unstable/apt/apt-get.8.en.html
+echo "Run apt-get update"
 $SUDO apt-get --allow-releaseinfo-change-suite update
+echo "Run apt-get install"
 $SUDO apt-get -qqy install \
   ca-certificates \
   azure-cli
