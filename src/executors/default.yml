@@ -8,5 +8,4 @@ parameters:
     default: "3.12.9"
 
 docker:
-  - image: >
-    cimg/python: <<parameters.python-version>>
+  - image: cimg/python: <<parameters.python-version>>
