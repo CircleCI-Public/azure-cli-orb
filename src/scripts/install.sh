@@ -3,7 +3,7 @@
 # Verify the CLI isn't already installed
 # Use which instead of command -v for wider coverage of envs
 
-if which az >/dev/null; then
+if az -v >/dev/null; then
   echo "Azure CLI installed already."
   exit 0
 fi
