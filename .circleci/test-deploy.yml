@@ -82,7 +82,6 @@ jobs:
   test-orb-azure-docker:
     executor: azure-cli/azure-docker
     steps:
-      - run: az -v
       - azure-cli-tests:
           login-with-service-principal: true
 
@@ -98,13 +97,16 @@ workflows:
       - test-orb-azure-docker:
           context: azure-acr-orb
           filters: *filters
+      - orb-tools/pack:
+          filters: *release-filters
       - orb-tools/publish:
-          orb_name: azure-cli
+          orb_name: circleci/azure-cli
           vcs_type: << pipeline.project.type >>
           pub_type: production
           requires:
             - test-orb-python
             - test-orb-golang
             - test-orb-azure-docker
-          context: azure-acr-orb
+            - orb-tools/pack
+          context: orb-publisher
           filters: *release-filters
