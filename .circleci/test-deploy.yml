@@ -86,7 +86,7 @@ jobs:
           login-with-service-principal: true
 
 workflows:
-  test-deploy:
+  integration-tests_prod-deploy:
     jobs:
       - test-orb-python:
           context: azure-acr-orb
