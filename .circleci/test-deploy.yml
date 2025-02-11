@@ -1,0 +1,116 @@
+---
+version: 2.1
+
+orbs:
+  azure-cli: {}
+  orb-tools: circleci/orb-tools@12.3.0
+
+filters: &filters
+  tags:
+    only: /.*/
+
+release-filters: &release-filters
+  branches:
+    ignore:
+  tags:
+    only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
+
+executors:
+  golang:
+    resource_class: small
+    docker:
+      - image: cimg/go:1.23.6
+
+commands:
+  azure-cli-tests:
+    description: "Verifies azure-cli install"
+    parameters:
+      login-with-service-principal:
+        type: boolean
+        default: false
+        description: Logs in with service principal
+      login-with-user:
+        type: boolean
+        default: false
+        description: Logs in with user
+      detect-login-type:
+        type: boolean
+        default: false
+        description: Detect the type of login to be performed
+    steps:
+      - azure-cli/install
+
+      - run:
+          name: Verify Azure install
+          command: az -v
+
+      - when:
+          condition: << parameters.login-with-service-principal >>
+          steps:
+            - azure-cli/login-with-service-principal:
+                azure-sp-tenant: AZURE_TENANT_ID
+                azure-sp: AZURE_APP_ID
+                azure-sp-password: AZURE_SECRET_VALUE
+
+      - when:
+          condition: << parameters.login-with-user >>
+          steps:
+            - azure-cli/login-with-user
+
+      - when:
+          condition: << parameters.detect-login-type >>
+          steps:
+            - azure-cli/login-with-user-or-service-principal
+
+      - run:
+          name: Verify login
+          command: az resource list
+
+jobs:
+  test-orb-python:
+    executor: azure-cli/default
+    steps:
+      - azure-cli-tests:
+          login-with-service-principal: true
+
+  test-orb-golang:
+    executor: golang
+    steps:
+      - azure-cli-tests:
+          login-with-service-principal: true
+
+  test-orb-azure-docker:
+    executor: azure-cli/azure-docker
+    steps:
+      - azure-cli-tests:
+          login-with-service-principal: true
+
+workflows:
+  integration-tests_prod-deploy:
+    jobs:
+      - test-orb-python:
+          context: azure-acr-orb
+          filters: *filters
+      - test-orb-golang:
+          context: azure-acr-orb
+          filters: *filters
+      - test-orb-azure-docker:
+          context: azure-acr-orb
+          filters: *filters
+      - orb-tools/pack:
+          filters: *release-filters
+      - orb-tools/publish:
+          orb_name: circleci/azure-cli
+          vcs_type: << pipeline.project.type >>
+          pub_type: production
+          requires:
+            - test-orb-python
+            - test-orb-golang
+            - test-orb-azure-docker
+            - orb-tools/pack
+          context: orb-publisher
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+$/

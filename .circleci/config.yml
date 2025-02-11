@@ -1,140 +1,33 @@
+---
 version: 2.1
-
+setup: true
 orbs:
-  azure-cli: circleci/azure-cli@<<pipeline.parameters.dev-orb-version>>
-  orb-tools: circleci/orb-tools@10
+  shellcheck: circleci/shellcheck@3.3.0
+  orb-tools: circleci/orb-tools@12.3.0
 
-# Pipeline parameters
-parameters:
-  # These pipeline parameters are required by the "trigger-integration-tests-workflow"
-  # job, by default.
-  run-integration-tests:
-    type: boolean
-    default: false
-  dev-orb-version:
-    type: string
-    default: "dev:alpha"
-
-executors:
-  golang:
-    resource_class: small
-    docker:
-      - image: circleci/golang
-
-  python:
-    resource_class: small
-    docker:
-      - image: cimg/python:3.10.2
-
-commands:
-  azure-cli-tests:
-    description: "Verifies azure-cli install"
-    parameters:
-      login-with-service-principal:
-        type: boolean
-        default: false
-        description: Logs in with service principal
-      login-with-user:
-        type: boolean
-        default: false
-        description: Logs in with user
-      detect-login-type:
-        type: boolean
-        default: false
-        description: Detect the type of login to be performed
-    steps:
-      - azure-cli/install
-
-      - run:
-          name: Verify Azure install
-          command: az -v
-
-      - when:
-          condition: << parameters.login-with-service-principal >>
-          steps:
-            - azure-cli/login-with-service-principal
-
-      - when:
-          condition: << parameters.login-with-user >>
-          steps:
-            - azure-cli/login-with-user
-
-      - when:
-          condition: << parameters.detect-login-type >>
-          steps:
-            - azure-cli/login-with-user-or-service-principal
-
-      - run:
-          name: Verify login
-          command: az resource list
-
-jobs:
-  test-orb-python:
-    executor: python
-    steps:
-      - azure-cli-tests:
-          detect-login-type: true
-
-  test-orb-golang:
-    executor: golang
-    steps:
-      - azure-cli-tests:
-          login-with-service-principal: true
-
-  test-orb-azure-docker:
-    executor: azure-cli/azure-docker
-    steps:
-      - run: az -v
-      - azure-cli-tests:
-          login-with-service-principal: true
+filters: &filters
+  tags:
+    only: /.*/
 
 workflows:
-  lint_pack-validate_publish-dev:
-    unless: << pipeline.parameters.run-integration-tests >>
+  lint-pack:
     jobs:
-      - orb-tools/lint
-      - orb-tools/pack
-
-      - orb-tools/publish-dev:
-          orb-name: circleci/azure-cli
-          context: orb-publisher
+      - orb-tools/lint:
+          filters: *filters
+      - orb-tools/pack:
+          filters: *filters
+      - orb-tools/review:
+          exclude: RC010
+          filters: *filters
+      - shellcheck/check:
+          filters: *filters
+      - orb-tools/continue:
+          orb_name: azure-cli
+          pipeline_number: << pipeline.number >>
+          vcs_type: << pipeline.project.type >>
           requires:
             - orb-tools/lint
             - orb-tools/pack
-
-      - orb-tools/trigger-integration-tests-workflow:
-          name: trigger-integration-dev
-          context: orb-publisher
-          requires:
-            - orb-tools/publish-dev
-
-  integration-tests_prod-deploy:
-    when: << pipeline.parameters.run-integration-tests >>
-    jobs:
-      # triggered by non-master branch commits
-      - test-orb-python:
-          context: azure-cli-orb-testing
-
-      - test-orb-azure-docker:
-          context: azure-cli-orb-testing
-
-      - test-orb-golang:
-          context: azure-cli-orb-testing
-
-      - orb-tools/dev-promote-prod-from-commit-subject:
-          orb-name: circleci/azure-cli
-          context: orb-publisher
-          add-pr-comment: true
-          bot-token-variable: GHI_TOKEN
-          bot-user: orb-publisher
-          fail-if-semver-not-indicated: true
-          publish-version-tag: true
-          ssh-fingerprints: 23:d1:63:44:ad:e7:1a:b0:45:5e:1e:e4:49:ea:63:4e
-          requires:
-            - test-orb-python
-            - test-orb-azure-docker
-            - test-orb-golang
-          filters:
-            branches:
-              only: master
-
+            - orb-tools/review
+            - shellcheck/check
+          filters: *filters

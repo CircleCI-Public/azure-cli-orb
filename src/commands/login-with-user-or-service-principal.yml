@@ -1,3 +1,4 @@
+---
 description: >
   Initilize the Azure CLI. Supports login either with a user or with a Service
   Principal. The type of login is determined by checking if the environment
@@ -5,7 +6,6 @@ description: >
   name of the Service Principal is set to a non-empty value.
 
 parameters:
-
   azure-username:
     type: env_var_name
     default: AZURE_USERNAME
@@ -16,7 +16,7 @@ parameters:
   azure-password:
     type: env_var_name
     default: AZURE_PASSWORD
-    description:  >
+    description: >
       Environment variable storing your Azure password.
       Only applicable for user logins.
 
@@ -58,22 +58,12 @@ parameters:
 steps:
   - run:
       name: Login to the Azure CLI with user or Service Principal
-      command: |
-        if [ -n "${<< parameters.azure-username >>}" ]; then
-          echo "User credentials detected; logging in with user"
-          az login \
-            <<#parameters.alternate-tenant>> \
-            --tenant $<<parameters.azure-tenant>> <</parameters.alternate-tenant>> \
-            -u $<<parameters.azure-username>> \
-            -p "$<<parameters.azure-password>>"
-        elif [ -n "${<< parameters.azure-sp >>}" ]; then
-          echo "Service Principal credentials detected; logging in with Service Principal"
-          az login \
-            --service-principal \
-            --tenant $<<parameters.azure-sp-tenant>> \
-            -u $<<parameters.azure-sp>> \
-            -p "$<<parameters.azure-sp-password>>"
-        else
-          echo "Login failed; neither user nor Service Principal credentials were provided"
-          exit 1
-        fi
+      environment:
+        AZURE_USERNAME: <<parameters.azure-username>>
+        ALTERNATE_TENANT: <<parameters.alternate-tenant>>
+        AZURE_TENANT: <<parameters.azure-tenant>>
+        AZURE_PASSWORD: <<parameters.azure-password>>
+        AZURE_SP: <<parameters.azure-sp>>
+        AZURE_SP_TENANT: $<<parameters.azure-sp-tenant>>
+        AZURE_SP_PASSWORD: $<<parameters.azure-sp-password>>
+      command: <<include(scripts/login-with-user-or-service-principal.sh)>>

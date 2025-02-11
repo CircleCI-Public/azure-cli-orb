@@ -1,3 +1,4 @@
+---
 description: Initilize the Azure CLI
 
 parameters:
@@ -10,7 +11,7 @@ parameters:
   azure-password:
     type: env_var_name
     default: AZURE_PASSWORD
-    description:  >
+    description: >
       Environment variable storing your Azure password
 
   alternate-tenant:
@@ -27,10 +28,10 @@ parameters:
 
 steps:
   - run:
+      environment:
+        AZURE_USERNAME: << parameters.azure-username >>
+        AZURE_PASSWORD: << parameters.azure-password >>
+        AZURE_TENANT: << parameters.azure-tenant >>
+        ALTERNATE_TENANT: << parameters.alternate-tenant >>
       name: Login to the Azure CLI via username/password
-      command: >
-        az login \
-          <<#parameters.alternate-tenant>> \
-          --tenant $<<parameters.azure-tenant>> <</parameters.alternate-tenant>> \
-          -u $<<parameters.azure-username>> \
-          -p "$<<parameters.azure-password>>"
+      command: << include(scripts/login-with-user.sh) >>

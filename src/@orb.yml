@@ -1,6 +1,8 @@
-description: |
-  Install, initialize, and log into the Azure command-line interface (azcli)
-display:
-  source_url: https://github.com/circleci-public/azure-cli-orb
+---
 version: 2.1
 
+description: |
+  Install, initialize, and log into the Azure command-line interface (azcli)
+
+display:
+  source_url: https://github.com/CircleCI-Public/azure-cli-orb
