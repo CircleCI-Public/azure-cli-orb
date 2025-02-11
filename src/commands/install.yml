@@ -5,4 +5,5 @@ description: >
 steps:
   - run:
       name: Install Azure CLI, if not available
+      no_output_timeout: 20m
       command: << include(scripts/install.sh) >>
