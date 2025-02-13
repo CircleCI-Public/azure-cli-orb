@@ -20,6 +20,10 @@ executors:
     resource_class: small
     docker:
       - image: cimg/go:1.23.6
+  alpine:
+    resource_class: small
+    docker:
+      - image: alpine:3.21.2
 
 commands:
   azure-cli-tests:
@@ -81,6 +85,12 @@ jobs:
 
   test-orb-azure-docker:
     executor: azure-cli/azure-docker
+    steps:
+      - azure-cli-tests:
+          login-with-service-principal: true
+
+  test-orb-alpine-docker:
+    executor: alpine
     steps:
       - azure-cli-tests:
           login-with-service-principal: true
