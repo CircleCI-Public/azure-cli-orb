@@ -107,6 +107,9 @@ workflows:
       - test-orb-azure-docker:
           context: azure-acr-orb
           filters: *filters
+      - test-orb-alpine-docker:
+          context: azure-acr-orb
+          filters: *filters
       - orb-tools/pack:
           filters: *release-filters
       - orb-tools/publish:
@@ -117,6 +120,7 @@ workflows:
             - test-orb-python
             - test-orb-golang
             - test-orb-azure-docker
+            - test-orb-alpine-docker
             - orb-tools/pack
           context: orb-publisher
           filters:
