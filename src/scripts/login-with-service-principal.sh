@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ -z "$BASH_VERSION" ]; then
-  exec /bin/bash "$0" "$@"
+  exec bash "$@"
 fi
 
 az login \
