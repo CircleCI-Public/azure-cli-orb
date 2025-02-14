@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 if [ -z "$BASH_VERSION" ]; then
+  echo "$@"
   exec bash "$@"
 fi
 
