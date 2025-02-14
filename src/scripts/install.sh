@@ -51,7 +51,9 @@ install_debian() {
 }
 
 install_alpine() {
-
+  apk update
+  apk add gcc musl-dev python3-dev libffi-dev openssl-dev cargo make py-pip
+  pip install azure-cli --break-system-packages
 }
 
 # Verify the CLI isn't already installed
