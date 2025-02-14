@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ ! "$BASH_VERSION" ]; then
+if [ -z "$BASH_VERSION" ]; then
   exec /bin/bash "$0" "$@"
 fi
 
