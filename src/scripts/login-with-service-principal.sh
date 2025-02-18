@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-AZURE_SP_TENANT="$(circleci env subst "$AZURE_SP_TENANT")"
-AZURE_SP="$(circleci env subst "$AZURE_SP")"
-AZURE_SP_PASSWORD="$(circleci env subst "$AZURE_SP_PASSWORD")"
+AZURE_SP_TENANT="$(circleci env subst "\$$AZURE_SP_TENANT")"
+AZURE_SP="$(circleci env subst "\$$AZURE_SP")"
+AZURE_SP_PASSWORD="$(circleci env subst "\$$AZURE_SP_PASSWORD")"
 
 az login \
   --service-principal \
