@@ -95,6 +95,15 @@ jobs:
       - azure-cli-tests:
           login-with-service-principal: true
 
+  test-orb-alpine-docker-old:
+    executor:
+      name: alpine
+      parameters:
+        tag: 2.68.0
+    steps:
+      - azure-cli-tests:
+          login-with-service-principal: true
+
 workflows:
   integration-tests_prod-deploy:
     jobs:
