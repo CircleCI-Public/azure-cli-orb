@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-ALTERNATE_TENANT_V=$(circleci env subst "\$$ALTERNATE_TENANT")
-AZURE_USERNAME_V=$(circleci env subst "\$$ALTERNATE_TENANT") 
-AZURE_PASSWORD_V=$(circleci env subst "\$$ALTERNATE_TENANT") 
-AZURE_TENANT_V=$(circleci env subst "\$$ALTERNATE_TENANT") 
+ALTERNATE_TENANT_V="$(circleci env subst "$ALTERNATE_TENANT")"
+AZURE_USERNAME_V="$(circleci env subst "$ALTERNATE_TENANT")"
+AZURE_PASSWORD_V="$(circleci env subst "$ALTERNATE_TENANT")"
+AZURE_TENANT_V="$(circleci env subst "$ALTERNATE_TENANT")"
 
 if [[ ! "${ALTERNATE_TENANT_V}" = "false" ]]; then
   az login  \
