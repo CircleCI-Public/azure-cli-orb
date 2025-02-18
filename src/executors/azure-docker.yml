@@ -9,4 +9,4 @@ parameters:
     default: latest
 
 docker:
-  - image: mcr.microsoft.com/azure-cli:<<parameters-tag>>
+  - image: mcr.microsoft.com/azure-cli:<<parameters.tag>>
