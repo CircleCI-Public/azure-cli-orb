@@ -20,6 +20,10 @@ executors:
     resource_class: small
     docker:
       - image: cimg/go:1.23.6
+  alpine:
+    resource_class: small
+    docker:
+      - image: alpine:3.21.2
 
 commands:
   azure-cli-tests:
@@ -85,6 +89,12 @@ jobs:
       - azure-cli-tests:
           login-with-service-principal: true
 
+  test-orb-alpine-docker:
+    executor: alpine
+    steps:
+      - azure-cli-tests:
+          login-with-service-principal: true
+
 workflows:
   integration-tests_prod-deploy:
     jobs:
@@ -97,6 +107,9 @@ workflows:
       - test-orb-azure-docker:
           context: azure-acr-orb
           filters: *filters
+      - test-orb-alpine-docker:
+          context: azure-acr-orb
+          filters: *filters
       - orb-tools/pack:
           filters: *release-filters
       - orb-tools/publish:
@@ -107,6 +120,7 @@ workflows:
             - test-orb-python
             - test-orb-golang
             - test-orb-azure-docker
+            - test-orb-alpine-docker
             - orb-tools/pack
           context: orb-publisher
           filters:
