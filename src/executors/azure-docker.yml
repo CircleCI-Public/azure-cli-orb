@@ -2,5 +2,11 @@
 description: >
   Microsoft's Azure CLI Docker image
 
+parameters:
+  tag:
+    description: "The microsoft azure cli Docker image version tag."
+    type: string
+    default: latest
+
 docker:
-  - image: mcr.microsoft.com/azure-cli
+  - image: mcr.microsoft.com/azure-cli:<<parameters.tag>>

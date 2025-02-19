@@ -95,6 +95,14 @@ jobs:
       - azure-cli-tests:
           login-with-service-principal: true
 
+  test-orb-alpine-docker-old:
+    executor:
+      name: azure-cli/azure-docker
+      tag: 2.68.0
+    steps:
+      - azure-cli-tests:
+          login-with-service-principal: true
+
 workflows:
   integration-tests_prod-deploy:
     jobs:
@@ -110,6 +118,9 @@ workflows:
       - test-orb-alpine-docker:
           context: azure-acr-orb
           filters: *filters
+      - test-orb-alpine-docker-old:
+          context: azure-acr-orb
+          filters: *filters
       - orb-tools/pack:
           filters: *release-filters
       - orb-tools/publish:
@@ -121,6 +132,7 @@ workflows:
             - test-orb-golang
             - test-orb-azure-docker
             - test-orb-alpine-docker
+            - test-orb-alpine-docker-old
             - orb-tools/pack
           context: orb-publisher
           filters:
