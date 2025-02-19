@@ -4,7 +4,7 @@ description: >
 
 parameters:
   tag:
-    description: "The `cimg/go` Docker image version tag."
+    description: "The microsoft azure cli Docker image version tag. See: https://mcr.microsoft.com/v2/azure-cli/tags/list"
     type: string
     default: latest
 
