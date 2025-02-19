@@ -97,7 +97,7 @@ jobs:
 
   test-orb-alpine-docker-old:
     executor:
-      name: alpine
+      name: azure-cli/azure-docker
       tag: 2.68.0
     steps:
       - azure-cli-tests:
