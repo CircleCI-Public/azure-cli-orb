@@ -4,7 +4,7 @@ description: >
 
 parameters:
   tag:
-    description: "The microsoft azure cli Docker image version tag. See: https://mcr.microsoft.com/v2/azure-cli/tags/list"
+    description: "The microsoft azure cli Docker image version tag."
     type: string
     default: latest
 
